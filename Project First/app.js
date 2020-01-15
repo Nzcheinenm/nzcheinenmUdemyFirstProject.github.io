@@ -46,13 +46,16 @@ const tasks = [{
     isNullText.setAttribute('style', 'display: none');
     document.querySelector('.list-group').appendChild(isNullText);
 
+
     // Events
+    sortingToWork();
     renderAllTasks(objOfTasks);
     form.addEventListener('submit', onFormSubmitHandler);
     listContainer.addEventListener('click', onDeletehandler);
     listContainer.addEventListener('click', onUpdatehandler);
 
-    sortingToWork();
+
+
 
     function renderAllTasks(tasksList) {
         if (!tasksList) {
@@ -131,6 +134,7 @@ const tasks = [{
         };
 
         objOfTasks[newTask._id] = newTask;
+
         isNullText.setAttribute('style', 'display: none');
 
         return {...newTask };
@@ -196,15 +200,15 @@ const tasks = [{
         let containerList = document.querySelector('.list-group');
 
         const elemBtnToWork = document.createElement('button');
-        elemBtnToWork.textContent = 'Working orders';
+        elemBtnToWork.textContent = 'Completed orders';
         elemBtnToWork.classList.add('btn', 'btn-primary', 'w-auto', 'p-1', 'm-2', 'work-btn');
 
         const elemBtnToOff = document.createElement('button');
-        elemBtnToOff.textContent = 'Off orders';
+        elemBtnToOff.textContent = 'All orders';
         elemBtnToOff.classList.add('btn', 'btn-primary', 'w-auto', 'p-1', 'm-2', 'off-btn');
 
-        elemBtnToOff.addEventListener('click', sortToWorkHandler);
-        elemBtnToWork.addEventListener('click', sortToOffHandler);
+        elemBtnToOff.addEventListener('click', sortToOffHandler);
+        elemBtnToWork.addEventListener('click', sortToWorkHandler);
 
         containerList.insertAdjacentElement('beforebegin', elemBtnToWork);
         containerList.insertAdjacentElement('beforebegin', elemBtnToOff);
@@ -212,12 +216,29 @@ const tasks = [{
 
 
     function sortToWorkHandler(e) {
-        let containerList = document.querySelector('.tasks-list-section');
 
+        const objOfTasksOffing = {};
+
+        for (let i in objOfTasks) {
+            if (objOfTasks[i].completed === true) {
+                objOfTasksOffing[objOfTasks[i]._id] = objOfTasks[i];
+            }
+        }
+
+        var doc = document.querySelectorAll('.flex-wrap');
+        for (let i of doc) {
+            i.remove();
+        }
+        renderAllTasks(objOfTasksOffing);
     }
 
-    function sortToOffHandler(e) {
 
+    function sortToOffHandler(e) {
+        var doc = document.querySelectorAll('.flex-wrap');
+        for (let i of doc) {
+            i.remove();
+        }
+        renderAllTasks(objOfTasks);
     }
 
 })(tasks);
